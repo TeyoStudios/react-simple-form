@@ -5,9 +5,9 @@ export interface RSF_FormInputProps extends React.InputHTMLAttributes<HTMLElemen
   name: string;                       // Clave del campo en el formulario
   formData: RSF_FormType;            // Formulario completo con values, errors y handlers
   label?: string;                    // Etiqueta opcional
-  type?: InputTypeKeys;
+  type?: InputTypeKeys | "text";
   inputClass?: string | null;       // Clase opcional para estilos
-  options?: SelectOpt[] | null;     // Solo para selectores
+  selectOptions?: SelectOpt[] | null;     // Solo para selectores
 }
 
 export const RSF_InputTypes = {

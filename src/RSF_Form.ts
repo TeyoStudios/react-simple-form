@@ -16,16 +16,10 @@ export const RSF_Form = (
 
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
-    console.log("ENTRA?")
       const target = e.target;
       const { name, type, value } = target;
       let newValue: FormValue;
-      
-      console.log(name)
-      console.log(type)
-      console.log(value)
-      console.log("ENTRA?")
-      
+
       if (type === "checkbox" && target instanceof HTMLInputElement) {
         newValue = target.checked;
       } else if (type === "number") {
@@ -33,13 +27,11 @@ export const RSF_Form = (
       } else {
         newValue = value;
       }
-      console.log("ENTRA?")
-      
+
       setValues((prev) => ({
         ...prev,
         [name]: newValue,
       }));
-      console.log("ENTRA?")
     };
 
   const validate = (): string | null => {
@@ -61,8 +53,6 @@ export const RSF_Form = (
       if (successCallback) successCallback(values);
       return null;
     }
-
-    return hasError ? "Validation failed" : null;
   };
 
   const setCallback = (cb: (values: FormValues) => void): RSF_FormType => {

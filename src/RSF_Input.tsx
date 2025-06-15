@@ -12,18 +12,15 @@ const RSF_Input = ({
   formData,
   inputClass = null,
   type,
-  options = [],
 }: RSF_FormInputProps) => {
   const value = formData.values[name] ?? "";
   const handlerChange = formData.onChange;
   const error = formData.errors[name] ?? null;
-
   
   // Obtener label desde el formData
   const data = formData.getData?.(name);
-  
-  console.log(data);
-  
+  const selectOptions = data?.getSelectOptions?.() ?? [];
+    
   const label = data?.getLabel?.() ?? "";
   const placeholder = data?.getPlaceholder?.() ?? "";
   // const type = data?.inputType ?? RSF_InputTypes.TEXT; 
@@ -36,7 +33,7 @@ const RSF_Input = ({
     placeholder,
     inputClass: inputClass || "",
     error,
-    type,
+    type: type ?? RSF_InputTypes.TEXT,
   };
 
   const components: Record<string, React.JSX.Element> = {
@@ -48,14 +45,16 @@ const RSF_Input = ({
     [RSF_InputTypes.SELECTOR]: (
       <Selector
         {...inputProps}
-        options={options || []}
+        options={selectOptions || []}
         placeholder={label}
       />
     ),
     [RSF_InputTypes.TEXTAREA]: <TextAreaCustom {...inputProps} />,
   };
 
-  return <div className="flex flex-col mb-2">{components[type]}</div>;
+  const inputType = type ?? RSF_InputTypes.TEXT;
+
+  return <div className="flex flex-col mb-2 flex-1">{components[inputType]}</div>;
 };
 
 const InputText = ({
@@ -71,6 +70,7 @@ const InputText = ({
   name,
   ...rest
 }: InputTextProps) => {
+
   const inputClassName = `w-full h-10 p-2 rounded-lg border-2 border-gray-300 focus:border-second focus:outline-none ${inputClass}`;
 
   return (
@@ -113,6 +113,9 @@ const Selector = ({
   name,
   ...rest
 }: SelectorProps) => {
+
+  const inputClassName = `w-full h-10 p-2 rounded-lg border-2 border-gray-300 focus:border-second focus:outline-none ${inputClass}`;
+
   return (
     <>
       {label && (
@@ -127,7 +130,7 @@ const Selector = ({
         name={name}
         value={value}
         onChange={onChange}
-        className={`bg-white h-8 ${inputClass}`}
+        className={`${inputClassName}`}
         {...rest}
       >
         {(placeholder !== undefined || placeholderPlus !== undefined) && (
@@ -159,6 +162,9 @@ const TextAreaCustom = ({
   name,
   ...rest
 }: TextAreaCustomProps) => {
+
+  const inputClassName = `w-full h-20 min-h-20 p-2 rounded-lg border-2 border-gray-300 focus:border-second focus:outline-none ${inputClass}`;
+
   return (
     <>
       {label && (
@@ -173,7 +179,7 @@ const TextAreaCustom = ({
         name={name}
         value={value}
         onChange={onChange}
-        className={`border border-[#363636] ${inputClass}`}
+        className={`${inputClassName}`}
         {...rest}
       ></textarea>
       {error && <p className="text-red-500">{error}</p>}

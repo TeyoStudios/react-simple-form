@@ -1,7 +1,7 @@
 import { RSF_DataPropsType, RSF_DataType } from "./types/RSF_DataTypes";
 import { RSF_FormDataTypes } from "./types/RSF_FormDataTypes";
 import { FormValue, ValidatorFn } from "./types/RSF_HookTypes";
-import { InputTextProps, InputTypeKeys, RSF_InputTypes, SelectOpt } from "./types/RSF_InputTypes";
+import { RSF_InputTypes, SelectOpt } from "./types/RSF_InputTypes";
 
 const InputTypeEquivalents: Record<RSF_FormDataTypes, string> = {
   [RSF_FormDataTypes.STRING]: RSF_InputTypes.TEXT,
@@ -18,14 +18,14 @@ export const RSF_Data = ({name, type}: RSF_DataPropsType): RSF_DataType => {
   let defaultValue: FormValue = "";
   let label: string|undefined = undefined;
   let placeholder: string|undefined = undefined;
-  let inputType: string = InputTypeEquivalents[type] ?? RSF_InputTypes.TEXT;
+  const inputType: string = InputTypeEquivalents[type] ?? RSF_InputTypes.TEXT;
   let selectOptions: SelectOpt[] | null = null;
   let isRequired = false;
 
   const api: RSF_DataType = {
     name,
     inputType,
-    selectOptions, // ⬅️ AÑADE ESTA LÍNEA
+    selectOptions,
 
     getDefaultValue: () => defaultValue,
     getLabel: () => label,
