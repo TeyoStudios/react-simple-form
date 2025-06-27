@@ -21,6 +21,7 @@ export const RSF_Data = ({name, type}: RSF_DataPropsType): RSF_DataType => {
   const inputType: string = InputTypeEquivalents[type] ?? RSF_InputTypes.TEXT;
   let selectOptions: SelectOpt[] | null = null;
   let isRequired = false;
+  let onChangeCallback:(e: React.ChangeEvent<HTMLInputElement>) => void = () => {};
 
   const api: RSF_DataType = {
     name,

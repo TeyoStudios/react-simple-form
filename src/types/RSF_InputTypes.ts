@@ -8,6 +8,7 @@ export interface RSF_FormInputProps extends React.InputHTMLAttributes<HTMLElemen
   type?: InputTypeKeys | "text";
   inputClass?: string | null;       // Clase opcional para estilos
   selectOptions?: SelectOpt[] | null;     // Solo para selectores
+  onChange?: (e: React.ChangeEvent<HTMLElement>) => void;
 }
 
 export const RSF_InputTypes = {

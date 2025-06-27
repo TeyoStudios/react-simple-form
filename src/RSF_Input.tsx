@@ -12,6 +12,7 @@ const RSF_Input = ({
   formData,
   inputClass = null,
   type,
+  onChange,
 }: RSF_FormInputProps) => {
   const value = formData.values[name] ?? "";
   const handlerChange = formData.onChange;
@@ -28,7 +29,7 @@ const RSF_Input = ({
   const inputProps = {
     name,
     value: typeof value === "string" || typeof value === "number" ? value : "",
-    onChange: handlerChange,
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {handlerChange(e), onChange ? onChange(e) : null},
     label,
     placeholder,
     inputClass: inputClass || "",
