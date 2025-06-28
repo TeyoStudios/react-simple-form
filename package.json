@@ -1,6 +1,6 @@
 {
   "name": "@teyostudios/react-simple-form",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Simple form for managing validations in React.",
   "main": "dist/index.js",
   "module": "dist/index.js",
