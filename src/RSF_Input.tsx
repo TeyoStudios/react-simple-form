@@ -13,6 +13,7 @@ const RSF_Input = ({
   inputClass = null,
   type,
   onChange,
+  ...props
 }: RSF_FormInputProps) => {
   const value = formData.values[name] ?? "";
   const handlerChange = formData.onChange;
@@ -35,6 +36,7 @@ const RSF_Input = ({
     inputClass: inputClass || "",
     error,
     type: type ?? RSF_InputTypes.TEXT,
+    ...props
   };
 
   const components: Record<string, React.JSX.Element> = {
