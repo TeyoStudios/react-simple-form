@@ -1,16 +1,6 @@
 import { RSF_FormType } from "./RSF_FormTypes";
 
-// Tipado del input principal (genérico) que recibe el componente RSF_Input
-export interface RSF_FormInputProps extends React.InputHTMLAttributes<HTMLElement> {
-  name: string;                       // Clave del campo en el formulario
-  formData: RSF_FormType;            // Formulario completo con values, errors y handlers
-  label?: string;                    // Etiqueta opcional
-  type?: InputTypeKeys | "text";
-  inputClass?: string | null;       // Clase opcional para estilos
-  selectOptions?: SelectOpt[] | null;     // Solo para selectores
-  onChange?: (e: React.ChangeEvent<HTMLElement>) => void;
-}
-
+/** Tipos posibles del input */
 export const RSF_InputTypes = {
   TEXT: "text",
   NUMBER: "number",
@@ -22,48 +12,48 @@ export const RSF_InputTypes = {
   TEXTAREA: "textarea",
 } as const;
 
-export type InputTypeKeys = typeof RSF_InputTypes[keyof typeof RSF_InputTypes]; 
+export type InputTypeKeys = typeof RSF_InputTypes[keyof typeof RSF_InputTypes];
 
-// Props del input clásico tipo <input />
-export interface InputTextProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  name?: string;
-  value: string | number | readonly string[];
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  label?: string;
-  type?: string;
-  placeholder?: string;
-  inputClass?: string | null;
-  min?: string | number;
-  max?: string | number;
-  error?: string | null;
-}
-
-// Opciones para selectores (select)
+/** Opciones para selectores (select) */
 export interface SelectOpt {
   id: string;
   value: string | number;
 }
 
-// Props específicos para el selector
-export interface SelectorProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  name?: string;
-  value: string | number;
+/** Props comunes a todos los inputs */
+export interface CommonRSFProps {
+  name: string;
+  formData: RSF_FormType;
   label?: string;
-  options?: SelectOpt[] | null;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  placeholder?: string;
-  placeholderPlus?: boolean;
   inputClass?: string | null;
-  selectedrest?: string[] | null;
+  selectOptions?: SelectOpt[] | null;
   error?: string | null;
 }
 
-// Props para <textarea>
-export interface TextAreaCustomProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  name?: string;
-  label?: string;
-  value: string | number;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  inputClass?: string | null;
-  error?: string | null;
-}
+/** Props para <input /> genérico */
+export type InputTextProps = CommonRSFProps &
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    type?: Exclude<InputTypeKeys, "SELECTOR" | "TEXTAREA">;
+  };
+
+/** Props para <select> */
+export type SelectorProps = CommonRSFProps &
+  React.SelectHTMLAttributes<HTMLSelectElement> & {
+    type: "selector";
+    placeholder?: string;
+    placeholderPlus?: boolean;
+    selectedrest?: string[] | null;
+    options?: SelectOpt[] | null;
+  };
+
+/** Props para <textarea> */
+export type TextAreaCustomProps = CommonRSFProps &
+  React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+    type: "textarea";
+  };
+
+/** Unión final para el componente RSF_Input */
+export type RSF_FormInputProps =
+  | InputTextProps
+  | SelectorProps
+  | TextAreaCustomProps;

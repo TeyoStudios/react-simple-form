@@ -25,8 +25,7 @@ const RSF_Input = ({
     
   const label = data?.getLabel?.() ?? "";
   const placeholder = data?.getPlaceholder?.() ?? "";
-  // const type = data?.inputType ?? RSF_InputTypes.TEXT; 
-  
+
   const inputProps = {
     name,
     value: typeof value === "string" || typeof value === "number" ? value : "",
@@ -124,7 +123,7 @@ const Selector = ({
       {label && (
         <label
           htmlFor={name}
-          className="uppercase text-xs font-semibold ml-2 tracking-widest"
+          className="uppercase text-xs font-semibold ml-2 mb-1 tracking-widest"
         >
           {label}
         </label>
@@ -173,7 +172,7 @@ const TextAreaCustom = ({
       {label && (
         <label
           htmlFor={name}
-          className="uppercase text-xs font-semibold ml-2 tracking-widest"
+          className="uppercase text-xs font-semibold ml-2 mb-1 tracking-widest"
         >
           {label}
         </label>
