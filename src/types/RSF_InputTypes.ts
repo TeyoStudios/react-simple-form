@@ -20,18 +20,15 @@ export interface SelectOpt {
   value: string | number;
 }
 
-/** Props comunes a todos los inputs */
 export interface CommonRSFProps {
   name: string;
-  formData: RSF_FormType;
   label?: string;
   inputClass?: string | null;
-  selectOptions?: SelectOpt[] | null;
   error?: string | null;
 }
 
 /** Props para <input /> genérico */
-export type InputTextProps = CommonRSFProps &
+export type InputProps = CommonRSFProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     type?: Exclude<InputTypeKeys, "SELECTOR" | "TEXTAREA">;
   };
@@ -39,9 +36,9 @@ export type InputTextProps = CommonRSFProps &
 /** Props para <select> */
 export type SelectorProps = CommonRSFProps &
   React.SelectHTMLAttributes<HTMLSelectElement> & {
-    type: "selector";
     placeholder?: string;
     placeholderPlus?: boolean;
+    selectOptions?: SelectOpt[] | null;
     selectedrest?: string[] | null;
     options?: SelectOpt[] | null;
   };
@@ -50,10 +47,33 @@ export type SelectorProps = CommonRSFProps &
 export type TextAreaCustomProps = CommonRSFProps &
   React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
     type: "textarea";
-  };
+};
 
-/** Unión final para el componente RSF_Input */
-export type RSF_FormInputProps =
-  | InputTextProps
-  | SelectorProps
-  | TextAreaCustomProps;
+
+/** Props para <input /> genérico */
+export type PreInputProps = InputProps & {
+  formData: RSF_FormType;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  type?: InputTypeKeys;
+};
+
+/** Props para <select> */
+export type PreSelectorProps = SelectorProps & { 
+  formData: RSF_FormType;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
+  type?: InputTypeKeys;
+}
+   
+/** Props para <textarea> */
+export type PreTextAreaProps = TextAreaCustomProps & {
+  formData: RSF_FormType;
+  onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
+  type?: InputTypeKeys;
+
+};
+
+
+export type RSF_FormInputProps = 
+  | PreInputProps
+  | PreSelectorProps
+  | PreTextAreaProps;

@@ -16,23 +16,23 @@ export const RSF_Form = (
 
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
-      const target = e.target;
-      const { name, type, value } = target;
-      let newValue: FormValue;
+    const target = e.target;
+    const { name, type, value } = target;
+    let newValue: FormValue;
 
-      if (type === "checkbox" && target instanceof HTMLInputElement) {
-        newValue = target.checked;
-      } else if (type === "number") {
-        newValue = Number(value);
-      } else {
-        newValue = value;
-      }
+    if (type === "checkbox" && target instanceof HTMLInputElement) {
+      newValue = target.checked;
+    } else if (type === "number") {
+      newValue = Number(value);
+    } else {
+      newValue = value;
+    }
 
-      setValues((prev) => ({
-        ...prev,
-        [name]: newValue,
-      }));
-    };
+    setValues((prev) => ({
+      ...prev,
+      [name]: newValue,
+    }));
+  };
 
   const validate = (): string | null => {
     const newErrors: FormErrors = {};

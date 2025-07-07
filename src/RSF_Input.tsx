@@ -1,35 +1,70 @@
 import {
-  InputTextProps,
+  InputProps,
   SelectOpt,
   SelectorProps,
   TextAreaCustomProps,
   RSF_FormInputProps,
   RSF_InputTypes,
+  PreInputProps,
+  PreSelectorProps,
+  PreTextAreaProps,
 } from "./types/RSF_InputTypes";
 
-const RSF_Input = ({
-  name,
+const RSF_Input = (props: RSF_FormInputProps) => {
+  let component = null;
+
+  switch (props.type) {
+    case RSF_InputTypes.SELECTOR:
+      const selectProps = props as PreSelectorProps;
+      component = getSelector(selectProps);
+      break;
+    case RSF_InputTypes.TEXTAREA:
+      const textAreaProps = props as PreTextAreaProps;
+      component = getTextArea(textAreaProps);
+      break;
+    case RSF_InputTypes.TEXT:
+    case RSF_InputTypes.NUMBER:
+    case RSF_InputTypes.PASSWORD:
+    case RSF_InputTypes.DATE:
+    case RSF_InputTypes.TIME:
+    default:
+      const inputProps = props as PreInputProps;
+      component = getInput(inputProps);
+  }
+  
+  return <div className="flex flex-col mb-2 flex-1">{component}</div>;
+};
+
+function createOnChangeHandler<E extends HTMLElement>(
+  handlerChange: (e: React.ChangeEvent<E>) => void,
+  onChange?: React.ChangeEventHandler<E>
+): React.ChangeEventHandler<E> {
+  return (e) => {
+    handlerChange(e);
+    onChange?.(e);
+  };
+}
+
+const getInput = ({name,
   formData,
   inputClass = null,
   type,
   onChange,
-  ...props
-}: RSF_FormInputProps) => {
+  ...props}: PreInputProps) => {
+
   const value = formData.values[name] ?? "";
   const handlerChange = formData.onChange;
   const error = formData.errors[name] ?? null;
   
   // Obtener label desde el formData
   const data = formData.getData?.(name);
-  const selectOptions = data?.getSelectOptions?.() ?? [];
-    
   const label = data?.getLabel?.() ?? "";
   const placeholder = data?.getPlaceholder?.() ?? "";
 
   const inputProps = {
     name,
     value: typeof value === "string" || typeof value === "number" ? value : "",
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {handlerChange(e), onChange ? onChange(e) : null},
+    onChange: createOnChangeHandler<HTMLInputElement>(handlerChange, onChange),
     label,
     placeholder,
     inputClass: inputClass || "",
@@ -38,26 +73,70 @@ const RSF_Input = ({
     ...props
   };
 
-  const components: Record<string, React.JSX.Element> = {
-    [RSF_InputTypes.TEXT]: <InputText {...inputProps} />,
-    [RSF_InputTypes.NUMBER]: <InputText {...inputProps} type="number" />,
-    [RSF_InputTypes.PASSWORD]: <InputText {...inputProps} type="password" />,
-    [RSF_InputTypes.DATE]: <InputText {...inputProps} type="date" />,
-    [RSF_InputTypes.TIME]: <InputText {...inputProps} type="time" />,
-    [RSF_InputTypes.SELECTOR]: (
-      <Selector
-        {...inputProps}
-        options={selectOptions || []}
-        placeholder={label}
-      />
-    ),
-    [RSF_InputTypes.TEXTAREA]: <TextAreaCustom {...inputProps} />,
+  return <InputText {...inputProps} />;
+}
+
+const getSelector = ({name,
+  formData,
+  inputClass = null,
+  onChange,
+  ...props}: PreSelectorProps) => {
+
+  const value = formData.values[name] ?? "";
+  const handlerChange = formData.onChange;
+  const error = formData.errors[name] ?? null;
+  
+  const data = formData.getData?.(name);
+  const selectOptions = data?.getSelectOptions?.() ?? [];
+    
+  const label = data?.getLabel?.() ?? "";
+  const placeholder = data?.getPlaceholder?.() ?? "";
+
+  const selectProps = {
+    name,
+    value: typeof value === "string" || typeof value === "number" ? value : "",
+    onChange: createOnChangeHandler<HTMLSelectElement>(handlerChange, onChange),
+    label,
+    placeholder,
+    inputClass: inputClass || "",
+    error,
+    type: RSF_InputTypes.SELECTOR,
+    selectOptions,
+    ...props
   };
 
-  const inputType = type ?? RSF_InputTypes.TEXT;
+  const component = <Selector {...selectProps} />
 
-  return <div className="flex flex-col mb-2 flex-1">{components[inputType]}</div>;
-};
+  return component; 
+}
+
+const getTextArea = ({name,
+  formData,
+  inputClass = null,
+  onChange,
+  ...props}: PreTextAreaProps) => {
+
+  const value = formData.values[name] ?? "";
+  const handlerChange = formData.onChange;
+  const error = formData.errors[name] ?? null;
+  
+  const data = formData.getData?.(name);
+  const label = data?.getLabel?.() ?? "";
+  const placeholder = data?.getPlaceholder?.() ?? "";
+
+  const inputProps = {
+    name,
+    value: typeof value === "string" || typeof value === "number" ? value : "",
+    onChange: createOnChangeHandler<HTMLTextAreaElement>(handlerChange, onChange),
+    label,
+    placeholder,
+    inputClass: inputClass || "",
+    error,
+    ...props
+  };
+
+  return <TextAreaCustom {...inputProps} type={RSF_InputTypes.TEXTAREA} />; 
+}
 
 const InputText = ({
   value,
@@ -71,7 +150,7 @@ const InputText = ({
   error,
   name,
   ...rest
-}: InputTextProps) => {
+}: InputProps) => {
 
   const inputClassName = `w-full h-10 p-2 rounded-lg border-2 border-gray-300 focus:border-second focus:outline-none ${inputClass}`;
 
