@@ -53,23 +53,22 @@ export type TextAreaCustomProps = CommonRSFProps &
 /** Props para <input /> genérico */
 export type PreInputProps = InputProps & {
   formData: RSF_FormType;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-  type?: InputTypeKeys;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  type: "text" | "number" | "password" | "date" | "time";
 };
 
 /** Props para <select> */
 export type PreSelectorProps = SelectorProps & { 
   formData: RSF_FormType;
-  onChange: React.ChangeEventHandler<HTMLSelectElement>;
-  type?: InputTypeKeys;
+  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  type: "selector";
 }
    
 /** Props para <textarea> */
 export type PreTextAreaProps = TextAreaCustomProps & {
   formData: RSF_FormType;
-  onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
-  type?: InputTypeKeys;
-
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
+  type: "textarea";
 };
 
 

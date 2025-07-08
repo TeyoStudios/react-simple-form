@@ -88,7 +88,7 @@ const getSelector = ({name,
   
   const data = formData.getData?.(name);
   const selectOptions = data?.getSelectOptions?.() ?? [];
-    
+  
   const label = data?.getLabel?.() ?? "";
   const placeholder = data?.getPlaceholder?.() ?? "";
 
@@ -100,8 +100,7 @@ const getSelector = ({name,
     placeholder,
     inputClass: inputClass || "",
     error,
-    type: RSF_InputTypes.SELECTOR,
-    selectOptions,
+    options: selectOptions,
     ...props
   };
 
@@ -194,7 +193,6 @@ const Selector = ({
   name,
   ...rest
 }: SelectorProps) => {
-
   const inputClassName = `w-full h-10 p-2 rounded-lg border-2 border-gray-300 focus:border-second focus:outline-none ${inputClass}`;
 
   return (
@@ -215,8 +213,8 @@ const Selector = ({
         {...rest}
       >
         {(placeholder !== undefined || placeholderPlus !== undefined) && (
-          <option value="" disabled={placeholderPlus} hidden={placeholderPlus}>
-            {placeholder || placeholderPlus}
+          <option value="" disabled={placeholderPlus} hidden={placeholderPlus} className="text-gray-400">
+            {placeholder}
           </option>
         )}
         {options?.map((opt: SelectOpt, index: number) => (
